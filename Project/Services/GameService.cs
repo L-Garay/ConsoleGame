@@ -13,6 +13,7 @@ namespace ConsoleAdventure.Project
     {
       _game = new Game();
       Messages = new List<string>();
+      Setup();
     }
     public void Go(string direction)
     {
@@ -21,40 +22,54 @@ namespace ConsoleAdventure.Project
         Messages.Add("Travelling...");
         _game.CurrentRoom = _game.CurrentRoom.Exits[direction];
         Messages.Add("Arrived");
+        Messages.Add(_game.CurrentRoom.Description);
         return;
       }
       Messages.Add("You can't go that way");
     }
     public void Help()
     {
-      throw new System.NotImplementedException();
+      System.Console.WriteLine("Here are a list of your commands:");
+      System.Console.WriteLine("");
+      System.Console.WriteLine("1) Go <direction>");
+      System.Console.WriteLine("");
+      System.Console.WriteLine("2) Take <item>");
+      System.Console.WriteLine("");
+      System.Console.WriteLine("3) Use <item>");
+      System.Console.WriteLine("");
+      System.Console.WriteLine("4) Look");
+      System.Console.WriteLine("");
+      System.Console.WriteLine("5) Inventory");
+      System.Console.WriteLine("");
+      System.Console.WriteLine("6) Quit");
+      System.Console.WriteLine("");
+      Messages.Add("Type in any of those commands");
     }
 
     public void Inventory()
     {
-      throw new System.NotImplementedException();
+      System.Console.WriteLine("Here is you current inventory.");
+      foreach (Item item in _game.CurrentPlayer.Inventory)
+      {
+        System.Console.WriteLine($"- {item}");
+      }
+      Messages.Add("Remember, only certain items can be used in certain rooms/ on certain doors.");
+      return;
     }
 
     public void Look()
     {
-      throw new System.NotImplementedException();
+      System.Console.WriteLine(_game.CurrentRoom.Description);
+      return;
     }
 
-    public void Quit()
+    public void Setup()
     {
-      throw new System.NotImplementedException();
+      Messages.Add(_game.CurrentRoom.Description);
     }
-    ///<summary>
-    ///Restarts the game 
-    ///</summary>
-    public void Reset()
+    public void Setup(string player)
     {
-      throw new System.NotImplementedException();
-    }
 
-    public void Setup(string playerName)
-    {
-      throw new System.NotImplementedException();
     }
     ///<summary>When taking an item be sure the item is in the current room before adding it to the player inventory, Also don't forget to remove the item from the room it was picked up in</summary>
     public void TakeItem(string itemName)

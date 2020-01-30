@@ -97,6 +97,7 @@ namespace ConsoleAdventure.Project.Models
       //Setting current player to main character
       CurrentPlayer = Bob;
 
+
     }
 
     public Game()
