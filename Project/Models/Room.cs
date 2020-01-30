@@ -9,7 +9,8 @@ namespace ConsoleAdventure.Project.Models
     public string Description { get; set; }
     public List<Item> Items { get; set; }
     public Dictionary<string, IRoom> Exits { get; set; }
-    public List<NPC> NPCs { get; set; }
+    public Dictionary<IItem, KeyValuePair<string, IRoom>> LockedExits { get; set; }
+
 
     public Room(string name, string description)
     {
@@ -17,7 +18,8 @@ namespace ConsoleAdventure.Project.Models
       Description = description;
       Items = new List<Item>();
       Exits = new Dictionary<string, IRoom>();
-      NPCs = new List<NPC>();
+      LockedExits = new Dictionary<IItem, KeyValuePair<string, IRoom>>();
+
     }
   }
 }
