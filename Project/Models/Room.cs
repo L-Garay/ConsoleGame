@@ -12,6 +12,7 @@ namespace ConsoleAdventure.Project.Models
     public Dictionary<IItem, KeyValuePair<string, IRoom>> LockedExits { get; set; }
 
 
+
     public Room(string name, string description)
     {
       Name = name;
@@ -19,6 +20,7 @@ namespace ConsoleAdventure.Project.Models
       Items = new List<Item>();
       Exits = new Dictionary<string, IRoom>();
       LockedExits = new Dictionary<IItem, KeyValuePair<string, IRoom>>();
+
 
     }
   }

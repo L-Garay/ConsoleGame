@@ -74,8 +74,21 @@ namespace ConsoleAdventure.Project
     ///<summary>When taking an item be sure the item is in the current room before adding it to the player inventory, Also don't forget to remove the item from the room it was picked up in</summary>
     public void TakeItem(string itemName)
     {
-      throw new System.NotImplementedException();
+      var ItemToTake = _game.CurrentRoom.Items.Find(i => i.Name == itemName);
+      if (ItemToTake == null)
+      {
+        Messages.Add("Unable to find the item you specified");
+        return;
+      }
+      else
+      {
+        _game.CurrentPlayer.Inventory.Add(ItemToTake);
+        _game.CurrentRoom.Items.Remove(ItemToTake);
+        Messages.Add($"Successfully added {ItemToTake} to your inventory!");
+        return;
+      }
     }
+
     ///<summary>
     ///No need to Pass a room since Items can only be used in the CurrentRoom
     ///Make sure you validate the item is in the room or player inventory before
@@ -83,7 +96,20 @@ namespace ConsoleAdventure.Project
     ///</summary>
     public void UseItem(string itemName)
     {
-      throw new System.NotImplementedException();
+      var ItemToUse = _game.CurrentPlayer.Inventory.Find(i => i.Name == itemName);
+      if (ItemToUse == null)
+      {
+
+        Messages.Add("Unable to find that item");
+        return;
+      }
+      else if (_game.CurrentRoom.LockedExits.ContainsKey(ItemToUse))
+      {
+        var NowUnlocked = _game.CurrentRoom.LockedExits[ItemToUse];
+        _game.CurrentRoom.Exits.Add(NowUnlocked.Key, NowUnlocked.Value);
+        _game.CurrentRoom.LockedExits.Remove(ItemToUse);
+        Messages.Add("Successfully used item!");
+      }
     }
   }
 }

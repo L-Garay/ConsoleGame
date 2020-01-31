@@ -78,7 +78,7 @@ namespace ConsoleAdventure.Project.Controllers
           }
           break;
         default:
-          System.Console.WriteLine("test");
+          System.Console.WriteLine("That's not an option.");
           break;
       }
 
