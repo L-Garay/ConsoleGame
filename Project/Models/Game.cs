@@ -36,10 +36,10 @@ namespace ConsoleAdventure.Project.Models
 
 
       //Creating items
-      Item Shovel = new Item("A Rusty Shovel", "An old rusty metal shovel, leaning up against the side of the building.");
-      Item Flashlight = new Item("A Flashlight", "Just your average looking flashlight.");
-      Item KitchenKey = new Item("Key to Kitchen", "A silver key that looks like it has some grease or oil on it.");
-      Item ManagerKey = new Item("Key to Manager's Office", "A gold key that looks like it's been used often.");
+      Item Shovel = new Item("Shovel", "An old rusty metal shovel, leaning up against the side of the building.");
+      Item Flashlight = new Item("Flashlight", "Just your average looking flashlight.");
+      Item KitchenKey = new Item("Key", "A silver key that looks like it has some grease or oil on it.");
+      Item ManagerCard = new Item("Card", "A gold key that looks like it's been used often.");
 
       //Creating Player, there's a set protagonist
       Player Bob = new Player("Bob");
@@ -48,7 +48,7 @@ namespace ConsoleAdventure.Project.Models
       ToolShed.Items.Add(Shovel);
       SleepingQuarters.Items.Add(KitchenKey);
       Kitchen.Items.Add(Flashlight);
-      ManagerOffice.Items.Add(ManagerKey);
+      ManagerOffice.Items.Add(ManagerCard);
 
       //Adding not locked/trap door exits to the rooms
       Courtyard.Exits.Add("east", LawnArea1);
@@ -82,7 +82,7 @@ namespace ConsoleAdventure.Project.Models
       //Adding locked/hidden doors to rooms
       LaundryRoom.LockedExits.Add(KitchenKey, new KeyValuePair<string, IRoom>("south", Kitchen));
       Hallway2.LockedExits.Add(Shovel, new KeyValuePair<string, IRoom>("east", ManagerOffice));
-      ManagerOffice.LockedExits.Add(ManagerKey, new KeyValuePair<string, IRoom>("west", Hallway2));
+      ManagerOffice.LockedExits.Add(ManagerCard, new KeyValuePair<string, IRoom>("west", Hallway2));
       SleepingQuarters.LockedExits.Add(Flashlight, new KeyValuePair<string, IRoom>("south", ManagerOffice));
 
       //Adding trap doors to rooms
