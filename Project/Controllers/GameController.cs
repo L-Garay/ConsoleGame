@@ -11,12 +11,12 @@ namespace ConsoleAdventure.Project.Controllers
   public class GameController : IGameController
   {
     private GameService _gameService = new GameService();
-    private bool _playing = true;
+
 
     //NOTE Makes sure everything is called to finish Setup and Starts the Game loop
     public void Run()
     {
-      while (_playing)
+      while (_gameService.playing)
       {
         Print();
         GetUserInput();
@@ -45,6 +45,10 @@ namespace ConsoleAdventure.Project.Controllers
           _gameService.Look();
           Print();
           break;
+        case "search":
+          _gameService.Search();
+          Print();
+          break;
         case "help":
           _gameService.Help();
           Print();
@@ -69,7 +73,7 @@ namespace ConsoleAdventure.Project.Controllers
           if (choice == "yes")
           {
             System.Console.WriteLine("Thanks for playing, come back again!");
-            _playing = false;
+            _gameService.playing = false;
           }
           else
           {

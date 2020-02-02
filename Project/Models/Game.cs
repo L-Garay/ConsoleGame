@@ -11,6 +11,9 @@ namespace ConsoleAdventure.Project.Models
     //NOTE Make yo rooms here...
     public void Setup()
     {
+      // Win room
+      Room Car = new Room("Car", "You noticed an old toyota pickup parked next to the guard house that looks like it's in decent condition.");
+
       //Main rooms
       Room Courtyard = new Room("Courtyard", "You walk up the driveway and are faced with a large, run down building.  You see the sign 'Name Asylum' and know you're at the right place.  You can see the front door is barred up, but there are no fences around the building.");
       Room Library = new Room("Library", "Library description");
@@ -18,7 +21,7 @@ namespace ConsoleAdventure.Project.Models
       Room Kitchen = new Room("Kitchen", "kitchen description");
       Room ManagerOffice = new Room("Manager's Office", "Manager's office room description");
       Room CommonArea = new Room("Common Area", "Common area description");
-      Room SleepingQuarters = new Room("Sleeping Quaters", "Sleeping quaters description");
+      Room SleepingQuarters = new Room("Sleeping Quarters", "Sleeping quarters description");
       Room Bathrooms = new Room("Bathrooms", "Bathrooms description");
       Room ToolShed = new Room("Tool Shed", "An almost collasped shack with some old tools in it.");
 
@@ -78,12 +81,15 @@ namespace ConsoleAdventure.Project.Models
       CommonArea.Exits.Add("west", Library);
       Library.Exits.Add("east", CommonArea);
       Library.Exits.Add("west", LawnArea3);
+      Kitchen.Exits.Add("north", LaundryRoom);
+      ManagerOffice.Exits.Add("south", SleepingQuarters);
 
       //Adding locked/hidden doors to rooms
       LaundryRoom.LockedExits.Add(KitchenKey, new KeyValuePair<string, IRoom>("south", Kitchen));
       Hallway2.LockedExits.Add(Shovel, new KeyValuePair<string, IRoom>("east", ManagerOffice));
       ManagerOffice.LockedExits.Add(ManagerCard, new KeyValuePair<string, IRoom>("west", Hallway2));
       SleepingQuarters.LockedExits.Add(Flashlight, new KeyValuePair<string, IRoom>("south", ManagerOffice));
+      Courtyard.LockedExits.Add(ManagerCard, new KeyValuePair<string, IRoom>("south", Car));
 
       //Adding trap doors to rooms
       Hallway1.Exits.Add("west", TrapArea1);
