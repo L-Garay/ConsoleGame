@@ -29,6 +29,10 @@ namespace ConsoleAdventure.Project.Models
       //Secondary rooms
       Room Hallway1 = new Room("First Hallway", "You step into a long hallway with doors in all directions.");
       Room Hallway2 = new Room("Second Hallway", "You step into a long hallway with numerous options.");
+      Room LockedDoor1 = new Room("Locked Door #1", "the locked door from hallway2 to managers office.");
+      Room LockedDoor2 = new Room("Locked Door #2", "the locked door from laundry room to kitchen.");
+      Room LockedDoor3 = new Room("Locked Door #3", "the locked door from managers office to hallway2");
+
       Room SecretPassage = new Room("Secret Passage", "It appears there's a small hole dug into the side of the wall, just big enough for someone to fit through.");
       Room LawnArea1 = new Room("Lawn area #1", "You walk to the SE edge of the building and look around the corner. One way, you see some sort of shed further down the side of the building. The other takes you back to the Courtyard.");
       Room LawnArea2 = new Room("Lawn area #2", "You walk to the SW edge of the building and look around the corner.");
@@ -74,6 +78,7 @@ namespace ConsoleAdventure.Project.Models
       LawnArea5.Exits.Add("west", LawnArea4);
       LawnArea5.Exits.Add("south", LaundryRoom);
       LaundryRoom.Exits.Add("east", Hallway2);
+      LaundryRoom.Exits.Add("north", LawnArea5);
       Hallway2.Exits.Add("west", LaundryRoom);
       Hallway2.Exits.Add("south", Hallway1);
       Hallway1.Exits.Add("north", Hallway2);
@@ -89,11 +94,18 @@ namespace ConsoleAdventure.Project.Models
       Kitchen.Exits.Add("north", LaundryRoom);
       ManagerOffice.Exits.Add("south", SleepingQuarters);
       Courtyard.Exits.Add("south", Car);
+      Car.Exits.Add("north", Courtyard);
+      Hallway2.Exits.Add("east", LockedDoor1);
+      LockedDoor1.Exits.Add("west", Hallway2);
+      LaundryRoom.Exits.Add("south", LockedDoor2);
+      LockedDoor2.Exits.Add("north", LaundryRoom);
+      ManagerOffice.Exits.Add("west", LockedDoor3);
+      LockedDoor3.Exits.Add("east", ManagerOffice);
 
       //Adding locked/hidden doors to rooms
-      LaundryRoom.LockedExits.Add(KitchenKey, new KeyValuePair<string, IRoom>("south", Kitchen));
-      Hallway2.LockedExits.Add(Shovel, new KeyValuePair<string, IRoom>("east", ManagerOffice));
-      ManagerOffice.LockedExits.Add(ManagerCard, new KeyValuePair<string, IRoom>("west", Hallway2));
+      LockedDoor2.LockedExits.Add(KitchenKey, new KeyValuePair<string, IRoom>("south", Kitchen));
+      LockedDoor1.LockedExits.Add(Shovel, new KeyValuePair<string, IRoom>("east", ManagerOffice));
+      LockedDoor3.LockedExits.Add(ManagerCard, new KeyValuePair<string, IRoom>("west", Hallway2));
       SleepingQuarters.LockedExits.Add(Flashlight, new KeyValuePair<string, IRoom>("south", ManagerOffice));
       Car.LockedExits.Add(CarKey, new KeyValuePair<string, IRoom>("south", WinRoom));
 

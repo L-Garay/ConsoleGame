@@ -22,12 +22,13 @@ namespace ConsoleAdventure.Project.Controllers
         GetUserInput();
       }
       Console.Clear();
-      if (!_gameService.validate)
+      if (_gameService._game.CurrentRoom.Name == "Death #1" || _gameService._game.CurrentRoom.Name == "Death #2" || _gameService._game.CurrentRoom.Name == "Win Room")
       {
-        System.Console.WriteLine("This is before print");
-        Print();
-        System.Console.WriteLine("This is after print");
-
+        System.Console.WriteLine(_gameService._game.CurrentRoom.Description);
+      }
+      if (_gameService._game.CurrentRoom.Name == "Manager's Office")
+      {
+        System.Console.WriteLine();
       }
       System.Console.WriteLine("Thanks for playing");
 

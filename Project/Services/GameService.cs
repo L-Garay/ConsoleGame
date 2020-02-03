@@ -12,6 +12,9 @@ namespace ConsoleAdventure.Project
     public List<string> Messages { get; set; }
     public bool playing { get; set; } = true;
     public bool validate { get; set; } = true;
+    public string NoShovelFlashlight { get; set; } = "You quickly raise your flashlight and swing it your onrushing brother; it's short and that allows him to close the distance to you and block it... He bites your throat and starts ripping violently, he has such strength for something so appearently frail.  Your last memories are of your deranged brother ripping your throat out...";
+    public string NoShovelNoFlashlight { get; set; } = "You stand there in shock as your brother quickly jumps and knocks you over and begins to scrape at your face with animal like ferocity... You try to push him off but there is something unnatural about him; your last visions are of him snarling and beating you...";
+
     public GameService()
     {
       _game = new Game();
@@ -24,12 +27,12 @@ namespace ConsoleAdventure.Project
       {
         Messages.Add("Travelling...");
         _game.CurrentRoom = _game.CurrentRoom.Exits[direction];
-        if (_game.CurrentRoom.Name == "Second Hallway" && direction == "east")
+        if (_game.CurrentRoom.Name == "Locked Door #1" && direction == "east")
         {
           Messages.Add("It's locked.  It's wood though, could be knocked down by something...");
           return;
         }
-        else if (_game.CurrentRoom.Name == "Laundry Room" && direction == "south")
+        else if (_game.CurrentRoom.Name == "Locked Door #2" && direction == "south")
         {
           Messages.Add("It's locked.  How am I supposed to find a key in this giant place?");
           return;
@@ -39,13 +42,25 @@ namespace ConsoleAdventure.Project
           Messages.Add("It's locked.  This looks like my brother's truck, where is that guy...");
           return;
         }
+        else if (_game.CurrentRoom.Name == "Locked Door #3" && direction == "west")
+        {
+          Messages.Add("It's locked.  There's some sort of card reader next to the door though.");
+          return;
+        }
         else if (_game.CurrentRoom.Name == "Death #1" || _game.CurrentRoom.Name == "Death #2")
         {
-          Messages.Add("Better luck next time, thanks for playing.");
+          EndGame();
+        }
+        else if (_game.CurrentRoom.Name == "Win Room")
+        {
           EndGame();
         }
         Messages.Add("Arrived");
         Messages.Add(_game.CurrentRoom.Description);
+        if (_game.CurrentRoom.Name == "Manager's Office" && _game.CurrentPlayer.Inventory.Exists(i => i.Name != "Shovel") && _game.CurrentPlayer.Inventory.Exists(i => i.Name == "Flashlight") || _game.CurrentRoom.Name == "Manager's Office" && _game.CurrentPlayer.Inventory.Exists(i => i.Name != "Shovel"))
+        {
+          EndGame();
+        }
         return;
       }
       Messages.Add("You can't go that way");
@@ -195,7 +210,7 @@ namespace ConsoleAdventure.Project
         var NowUnlocked = _game.CurrentRoom.LockedExits[ItemToUse];
         _game.CurrentRoom.Exits.Add(NowUnlocked.Key, NowUnlocked.Value);
         _game.CurrentRoom.LockedExits.Remove(ItemToUse);
-        Messages.Add("Successfully used item!");
+        Messages.Add("It worked! After a couple tries and a lot of cursing the thing finally started running. Now time to get out of here...");
         _game.CurrentPlayer.Inventory.Remove(ItemToUse);
         return;
       }
@@ -219,7 +234,7 @@ namespace ConsoleAdventure.Project
       else if (ItemToUse.Name.ToLower() == "shovel" && _game.CurrentRoom.Name == "Manager's Office")
       {
         Messages.Add("You swing the shovel as hard as you can, and it get's lodged in your brother's skull; he lets out an animal like scream before collapsing to the floor.");
-        Messages.Add("As his body hits the ground, you a slight jingle.  What could that have been?");
+        Messages.Add("As his body hits the ground, you hear a slight jingle.  What could that have been?");
         _game.CurrentPlayer.Inventory.Remove(ItemToUse);
         return;
       }
