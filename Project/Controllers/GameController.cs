@@ -22,7 +22,13 @@ namespace ConsoleAdventure.Project.Controllers
         GetUserInput();
       }
       Console.Clear();
+      Print();
+      foreach (var message in _gameService.Messages)
+      {
+        System.Console.WriteLine(message);
+      }
       System.Console.WriteLine("Thanks for playing");
+
     }
 
     //NOTE Gets the user input, calls the appropriate command, and passes on the option if needed.

@@ -7,7 +7,7 @@ namespace ConsoleAdventure.Project
 {
   public class GameService : IGameService
   {
-    private IGame _game { get; set; }
+    public IGame _game { get; set; }
 
     public List<string> Messages { get; set; }
     public bool playing { get; set; } = true;
@@ -25,9 +25,21 @@ namespace ConsoleAdventure.Project
         _game.CurrentRoom = _game.CurrentRoom.Exits[direction];
         Messages.Add("Arrived");
         Messages.Add(_game.CurrentRoom.Description);
+        if (_game.CurrentRoom.Name == "Death #1" || _game.CurrentRoom.Name == "Death #2")
+        {
+
+          Messages.Add("Better luck next time, thanks for playing.");
+          EndGame();
+
+
+        }
         return;
       }
       Messages.Add("You can't go that way");
+    }
+    public void EndGame()
+    {
+      playing = false;
     }
     public void Help()
     {
