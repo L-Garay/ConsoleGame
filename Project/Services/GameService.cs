@@ -137,17 +137,29 @@ namespace ConsoleAdventure.Project
         }
         return;
       }
+      else
+      {
+        Messages.Add("After looking around, you conclude that there's nothing useful in the room.");
+        return;
+      }
     }
 
     public void Inventory()
     {
-      Messages.Add("Here is you current inventory.");
-      foreach (Item item in _game.CurrentPlayer.Inventory)
+      if (_game.CurrentPlayer.Inventory.Count == 0)
       {
-        Messages.Add($"- {item.Name}");
+        Messages.Add("You don't have anyting in your inventory at the moment.");
+        return;
       }
-      Messages.Add("Remember, only certain items can be used in certain rooms/ on certain doors.");
-      return;
+      else if (_game.CurrentPlayer.Inventory.Count > 0)
+      {
+        Messages.Add("Here is you current inventory.");
+        foreach (Item item in _game.CurrentPlayer.Inventory)
+        {
+          Messages.Add($"- {item.Name}");
+          Messages.Add("Remember, only certain items can be used in certain rooms/ on certain doors.");
+        }
+      }
     }
 
     public void Look()
