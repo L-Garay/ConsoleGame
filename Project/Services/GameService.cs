@@ -11,6 +11,7 @@ namespace ConsoleAdventure.Project
 
     public List<string> Messages { get; set; }
     public bool playing { get; set; } = true;
+    public bool validate { get; set; } = true;
     public GameService()
     {
       _game = new Game();
@@ -23,23 +24,35 @@ namespace ConsoleAdventure.Project
       {
         Messages.Add("Travelling...");
         _game.CurrentRoom = _game.CurrentRoom.Exits[direction];
-        Messages.Add("Arrived");
-        Messages.Add(_game.CurrentRoom.Description);
-        if (_game.CurrentRoom.Name == "Death #1" || _game.CurrentRoom.Name == "Death #2")
+        if (_game.CurrentRoom.Name == "Second Hallway" && direction == "east")
         {
-
+          Messages.Add("It's locked.  It's wood though, could be knocked down by something...");
+          return;
+        }
+        else if (_game.CurrentRoom.Name == "Laundry Room" && direction == "south")
+        {
+          Messages.Add("It's locked.  How am I supposed to find a key in this giant place?");
+          return;
+        }
+        else if (_game.CurrentRoom.Name == "Car" && direction == "south")
+        {
+          Messages.Add("It's locked.  This looks like my brother's truck, where is that guy...");
+          return;
+        }
+        else if (_game.CurrentRoom.Name == "Death #1" || _game.CurrentRoom.Name == "Death #2")
+        {
           Messages.Add("Better luck next time, thanks for playing.");
           EndGame();
-
-
         }
+        Messages.Add("Arrived");
+        Messages.Add(_game.CurrentRoom.Description);
         return;
       }
       Messages.Add("You can't go that way");
     }
     public void EndGame()
     {
-      playing = false;
+      validate = false;
     }
     public void Help()
     {
@@ -65,17 +78,47 @@ namespace ConsoleAdventure.Project
     {
       if (_game.CurrentRoom.Name == "Tool Shed")
       {
-        Messages.Add($"As you step into the doorway to see what's inside, you can see that there's not much; and what is left is all either broken or useless.  As you turn around however, you notice a rusty shovel laying in the grass.");
+        Messages.Add("As you step into the doorway to see what's inside, you can see that there's not much; and what is left is all either broken or useless.  As you turn around however, you notice a rusty shovel laying in the grass.");
+        Messages.Add("------------------");
+        foreach (Item item in _game.CurrentRoom.Items)
+        {
+          Messages.Add($"-{item.Name}");
+        }
         return;
       }
       else if (_game.CurrentRoom.Name == "Sleeping Quarters" && _game.CurrentPlayer.Inventory.Exists(f => f.Name == "Flashlight"))
       {
-        Messages.Add("You stand in the doorway and turn on the flashlight, it's not the brightest but it works well enough.  You shine it around the room as you enter, there's garbage and broken items all around with old metal bed frames scattered about.  Most of the windows have metal bars or some sort of makeshift cover over them.  There's not much in the room anymore, although you notice that theres a section of furniture with very little dust on them.  And they are clustered up against a section of wall on the south side of the room.");
+        Messages.Add("It's dark, I need to use something to see better.");
         return;
       }
       else if (_game.CurrentRoom.Name == "Sleeping Quarters")
       {
-        Messages.Add("The room is pitch black, and dead silent. There's got to be something of use in there, but it's impossible to see. Maybe there's a light switch somewhere.");
+        Messages.Add("The room is pitch black, and dead silent. There's got to be something of use in there, but it's impossible to see. Most light switchs are close to the door leading into the room, so you begin to feel along the wall immediatly next to the door.  You scrape it over chipping paint until you reach the switch; it doesn't work.  However you also bump a small hook on the wall and hear a jingle, what could that be?");
+        Messages.Add("------------------");
+        foreach (Item item in _game.CurrentRoom.Items)
+        {
+          Messages.Add($"-{item.Name}");
+        }
+        return;
+      }
+      else if (_game.CurrentRoom.Name == "Kitchen")
+      {
+        Messages.Add("You make sure to steer clear of the rotting animals and make your way around the kitchen looking for anything useful.  All the food is either empty or spoiled, no running water, and everything is knocked over or broken. As you walk by an overturned table you hit your foot against something and it rolls slightly back and forth.  You look down and it looks like it might be a flashlight. Does it work? ");
+        Messages.Add("------------------");
+        foreach (Item item in _game.CurrentRoom.Items)
+        {
+          Messages.Add($"-{item.Name}");
+        }
+        return;
+      }
+      else if (_game.CurrentRoom.Name == "Manager's Office")
+      {
+        Messages.Add("You slowly approach your dead brother, or whatever the creature is, very slowly... You kick it to roll it over, and with it facing up now, you know that it's your brother.  You bend over and pick up the cross, and inscribed on the backside are your mother and your initials.  You pull out your own cross, and look at your brother's and mother's initials inscribed on it.  But that jingle you heard sounded heavier, you slowly reach into the other tattered pocket in the barely hanging on pants of your brother, and pull out a keychain with a single key and some sort of card on in.  They have to be used for something.");
+        Messages.Add("------------------");
+        foreach (Item item in _game.CurrentRoom.Items)
+        {
+          Messages.Add($"-{item.Name}");
+        }
         return;
       }
     }
@@ -138,7 +181,16 @@ namespace ConsoleAdventure.Project
         Messages.Add("Unable to find that item");
         return;
       }
-      else if (ItemToUse.Name.ToLower() == "key" && _game.CurrentRoom.LockedExits.ContainsKey(ItemToUse))
+      else if (ItemToUse.Name.ToLower() == "kitchenkey" && _game.CurrentRoom.LockedExits.ContainsKey(ItemToUse))
+      {
+        var NowUnlocked = _game.CurrentRoom.LockedExits[ItemToUse];
+        _game.CurrentRoom.Exits.Add(NowUnlocked.Key, NowUnlocked.Value);
+        _game.CurrentRoom.LockedExits.Remove(ItemToUse);
+        Messages.Add("Successfully used item!");
+        _game.CurrentPlayer.Inventory.Remove(ItemToUse);
+        return;
+      }
+      else if (ItemToUse.Name.ToLower() == "carkey" && _game.CurrentRoom.LockedExits.ContainsKey(ItemToUse))
       {
         var NowUnlocked = _game.CurrentRoom.LockedExits[ItemToUse];
         _game.CurrentRoom.Exits.Add(NowUnlocked.Key, NowUnlocked.Value);
@@ -154,33 +206,36 @@ namespace ConsoleAdventure.Project
         {
           _game.CurrentRoom.Exits.Add(NowUnlocked1.Key, NowUnlocked1.Value);
           _game.CurrentRoom.LockedExits.Remove(ItemToUse);
-          Messages.Add("You slowly bend down a grab the keychain off the body.  There appears to be car keys on it as well.  You quickly download the files from the computer there in the office and use the card to unlock the door and begin to walkt out");
-          return;
-        }
-        else if (_game.CurrentRoom.Name == "Courtyard")
-        {
-          _game.CurrentRoom.Exits.Add(NowUnlocked1.Key, NowUnlocked1.Value);
-          _game.CurrentRoom.LockedExits.Remove(ItemToUse);
-          Messages.Add("You run through the courtyard and down the dirt driveway towards where you remember you saw the pickup.");
+          Messages.Add("You quickly rush over to the bank of monitors and look for the source computer.  You see it under the desk, how the hell is it still running? You quickly pull out the hard drive from the computer and use the card to unlock the door west of you and begin to walkt out.");
           return;
         }
       }
-      else if (_game.CurrentRoom.Name == "Car")
+      else if (ItemToUse.Name.ToLower() == "carkey" && _game.CurrentRoom.Name == "Car")
       {
-        System.Console.WriteLine("You get in the car and try the key. It works!  There's not much gas but it should be just enough to get out of here.  You quickly speed off, wondering if anyone will ever believe your story.  Do you even believe it yourself...");
+        System.Console.WriteLine("You get in the car and try the key. It works after a couple tries, but it does work.  There's not much gas but it should be just enough to get out of here.  You quickly speed off, wondering if anyone will ever believe your story.  Do you even believe it yourself...");
         playing = false;
 
       }
       else if (ItemToUse.Name.ToLower() == "shovel" && _game.CurrentRoom.Name == "Manager's Office")
       {
-        Messages.Add("You swing the shovel as hard as you can, and it get's lodged in your brother's skull; he is dead.");
-        Messages.Add("As his body hits the ground, you hear the slight jingle of what is probably a keychain.  And sure enough, as he does a final death roll, a keychain with a card and some sort of key falls out.");
+        Messages.Add("You swing the shovel as hard as you can, and it get's lodged in your brother's skull; he lets out an animal like scream before collapsing to the floor.");
+        Messages.Add("As his body hits the ground, you a slight jingle.  What could that have been?");
+        _game.CurrentPlayer.Inventory.Remove(ItemToUse);
+        return;
+      }
+      else if (ItemToUse.Name.ToLower() == "shovel" && _game.CurrentRoom.Name == "Second Hallway")
+      {
+        var NowUnlocked = _game.CurrentRoom.LockedExits[ItemToUse];
+        _game.CurrentRoom.Exits.Add(NowUnlocked.Key, NowUnlocked.Value);
+        _game.CurrentRoom.LockedExits.Remove(ItemToUse);
+        Messages.Add("Successfully used item!");
+        Messages.Add("You take a couple steps back, and then swing the shovel with all your might at the wooden door, it takes a couple minutes and your hands are definetely bruised, but you manage to break down the door. The shovel is useless now though, and you toss it to the side; and take a step in.");
         _game.CurrentPlayer.Inventory.Remove(ItemToUse);
         return;
       }
       else if (ItemToUse.Name.ToLower() == "flashlight" && _game.CurrentRoom.Name == "Sleeping Quarters")
       {
-        _game.CurrentRoom.Description = "You shine the light around the room and see that most of it is either broken or usesless.  However, upon closer inspection, you see that some of the items are stacked in front of an area on the far wall.";
+        _game.CurrentRoom.Description = "You stand in the doorway and turn on the flashlight, it's not the brightest but it works well enough.  You shine it around the room as you enter, there's garbage and broken items all around with old metal bed frames scattered about.  There are no windows, no wonder it so dark in here.  There's not much in the room anymore, although you notice that theres a section of furniture with very little dust on them.  And they are clustered up against a section of wall on the south side of the room.";
         var NowUnlocked2 = _game.CurrentRoom.LockedExits[ItemToUse];
         _game.CurrentRoom.Exits.Add(NowUnlocked2.Key, NowUnlocked2.Value);
         _game.CurrentRoom.LockedExits.Remove(ItemToUse);

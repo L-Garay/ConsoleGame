@@ -11,8 +11,9 @@ namespace ConsoleAdventure.Project.Models
     //NOTE Make yo rooms here...
     public void Setup()
     {
-      // Win room
+      // Winning Rooms
       Room Car = new Room("Car", "You noticed an old toyota pickup parked next to the guard house that looks like it's in decent condition. It might even be your brother's...");
+      Room WinRoom = new Room("Win Room", "You have escaped the asylum. Congratulations.");
 
       //Main rooms
       Room Courtyard = new Room("Courtyard", "You walk up the driveway, after you parked your car next to another pickup. And you are faced with a large, run down building.  You see the sign 'Name Asylum' and know you're at the right place. This is the place your brother came 2 years ago in search of the truth.  You haven't heard from him since that day, so now you've come yourself to try to find the truth of what happened. You must find your brother, and find evidence of what has been going on. As you approach the front of the building, can see the front door is barred up, but there are no fences around the sides.");
@@ -43,8 +44,9 @@ namespace ConsoleAdventure.Project.Models
       //Creating items
       Item Shovel = new Item("Shovel", "An old rusty metal shovel, leaning up against the side of the building.");
       Item Flashlight = new Item("Flashlight", "Just your average looking flashlight.");
-      Item KitchenKey = new Item("Key", "A silver key that looks like it has some grease or oil on it.");
+      Item KitchenKey = new Item("Kitchenkey", "A silver key that looks like it has some grease or oil on it.");
       Item ManagerCard = new Item("Card", "A keychain with some sort key and card on it.");
+      Item CarKey = new Item("Carkey", "The key to that old pickup out front.");
 
       //Creating Player, there's a set protagonist
       Player Bob = new Player("Bob");
@@ -54,6 +56,7 @@ namespace ConsoleAdventure.Project.Models
       SleepingQuarters.Items.Add(KitchenKey);
       Kitchen.Items.Add(Flashlight);
       ManagerOffice.Items.Add(ManagerCard);
+      ManagerOffice.Items.Add(CarKey);
 
       //Adding not locked/trap door exits to the rooms
       Courtyard.Exits.Add("east", LawnArea1);
@@ -85,13 +88,14 @@ namespace ConsoleAdventure.Project.Models
       Library.Exits.Add("west", LawnArea3);
       Kitchen.Exits.Add("north", LaundryRoom);
       ManagerOffice.Exits.Add("south", SleepingQuarters);
+      Courtyard.Exits.Add("south", Car);
 
       //Adding locked/hidden doors to rooms
       LaundryRoom.LockedExits.Add(KitchenKey, new KeyValuePair<string, IRoom>("south", Kitchen));
       Hallway2.LockedExits.Add(Shovel, new KeyValuePair<string, IRoom>("east", ManagerOffice));
       ManagerOffice.LockedExits.Add(ManagerCard, new KeyValuePair<string, IRoom>("west", Hallway2));
       SleepingQuarters.LockedExits.Add(Flashlight, new KeyValuePair<string, IRoom>("south", ManagerOffice));
-      Courtyard.LockedExits.Add(ManagerCard, new KeyValuePair<string, IRoom>("south", Car));
+      Car.LockedExits.Add(CarKey, new KeyValuePair<string, IRoom>("south", WinRoom));
 
       //Adding trap doors to rooms
       Hallway1.Exits.Add("west", TrapArea1);

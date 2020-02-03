@@ -16,16 +16,18 @@ namespace ConsoleAdventure.Project.Controllers
     //NOTE Makes sure everything is called to finish Setup and Starts the Game loop
     public void Run()
     {
-      while (_gameService.playing)
+      while (_gameService.playing && _gameService.validate)
       {
         Print();
         GetUserInput();
       }
       Console.Clear();
-      Print();
-      foreach (var message in _gameService.Messages)
+      if (!_gameService.validate)
       {
-        System.Console.WriteLine(message);
+        System.Console.WriteLine("This is before print");
+        Print();
+        System.Console.WriteLine("This is after print");
+
       }
       System.Console.WriteLine("Thanks for playing");
 
