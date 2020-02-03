@@ -12,8 +12,9 @@ namespace ConsoleAdventure.Project
     public List<string> Messages { get; set; }
     public bool playing { get; set; } = true;
     public bool validate { get; set; } = true;
-    public string NoShovelFlashlight { get; set; } = "You quickly raise your flashlight and swing it your onrushing brother; it's short and that allows him to close the distance to you and block it... He bites your throat and starts ripping violently, he has such strength for something so appearently frail.  Your last memories are of your deranged brother ripping your throat out...";
-    public string NoShovelNoFlashlight { get; set; } = "You stand there in shock as your brother quickly jumps and knocks you over and begins to scrape at your face with animal like ferocity... You try to push him off but there is something unnatural about him; your last visions are of him snarling and beating you...";
+    // public bool Active { get; set; } = true;
+    public string NoShovelFlashlight { get; set; } = " The first thing you notice as you enter the manager's office is the giant wall of screens, some have static but others are live feeds of cameras around the building...how could they still be working, maybe there's important video evidence on there.  As you start to approach the monitors, the chair swivels around and sitting in it is this horrible looking creature with rotting skin and tattered clothing. It tries to make sounds but they are indescernable; but something about this creature does strike you.  It is wearing a silver cross around it's neck, just like the one you are wearing; just like the one your brother bought for both of you when your mother died. However you don't have much time to think, as the creature lunges out of the chair at you! You quickly raise your flashlight and swing it your onrushing brother; it's short and that allows him to close the distance to you and block it... He bites your throat and starts ripping violently, he has such strength for something so appearently frail. If only you had some tool that was longer.  Your last memories are of your deranged brother ripping your throat out...";
+    public string NoShovelNoFlashlight { get; set; } = " The first thing you notice as you enter the manager's office is the giant wall of screens, some have static but others are live feeds of cameras around the building...how could they still be working, maybe there's important video evidence on there.  As you start to approach the monitors, the chair swivels around and sitting in it is this horrible looking creature with rotting skin and tattered clothing. It tries to make sounds but they are indescernable; but something about this creature does strike you.  It is wearing a silver cross around it's neck, just like the one you are wearing; just like the one your brother bought for both of you when your mother died. However you don't have much time to think, as the creature lunges out of the chair at you! You stand there in shock as your brother quickly jumps and knocks you over and begins to scrape at your face with animal like ferocity... You try to push him off but there is something unnatural about him.  If you only you had something to defend yourself; your last visions are of him snarling and beating you...";
 
     public GameService()
     {
@@ -47,7 +48,7 @@ namespace ConsoleAdventure.Project
           Messages.Add("It's locked.  There's some sort of card reader next to the door though.");
           return;
         }
-        else if (_game.CurrentRoom.Name == "Death #1" || _game.CurrentRoom.Name == "Death #2")
+        else if (_game.CurrentRoom is DeathRoom)
         {
           EndGame();
         }
@@ -57,7 +58,7 @@ namespace ConsoleAdventure.Project
         }
         Messages.Add("Arrived");
         Messages.Add(_game.CurrentRoom.Description);
-        if (_game.CurrentRoom.Name == "Manager's Office" && _game.CurrentPlayer.Inventory.Exists(i => i.Name != "Shovel") && _game.CurrentPlayer.Inventory.Exists(i => i.Name == "Flashlight") || _game.CurrentRoom.Name == "Manager's Office" && _game.CurrentPlayer.Inventory.Exists(i => i.Name != "Shovel"))
+        if (_game.CurrentRoom.Name == "Manager's Office" && !_game.CurrentPlayer.Inventory.Exists(i => i.Name == "Shovel") && _game.CurrentPlayer.Inventory.Exists(i => i.Name == "Flashlight") || _game.CurrentRoom.Name == "Manager's Office" && !_game.CurrentPlayer.Inventory.Exists(i => i.Name == "Shovel") && !_game.CurrentPlayer.Inventory.Exists(i => i.Name == "Flashlight"))
         {
           EndGame();
         }
@@ -238,7 +239,7 @@ namespace ConsoleAdventure.Project
         _game.CurrentPlayer.Inventory.Remove(ItemToUse);
         return;
       }
-      else if (ItemToUse.Name.ToLower() == "shovel" && _game.CurrentRoom.Name == "Second Hallway")
+      else if (ItemToUse.Name.ToLower() == "shovel" && _game.CurrentRoom.Name == "Locked Door #1")
       {
         var NowUnlocked = _game.CurrentRoom.LockedExits[ItemToUse];
         _game.CurrentRoom.Exits.Add(NowUnlocked.Key, NowUnlocked.Value);

@@ -20,15 +20,23 @@ namespace ConsoleAdventure.Project.Controllers
       {
         Print();
         GetUserInput();
+        if (!_gameService.validate)
+        {
+          Print();
+        }
       }
       Console.Clear();
       if (_gameService._game.CurrentRoom.Name == "Death #1" || _gameService._game.CurrentRoom.Name == "Death #2" || _gameService._game.CurrentRoom.Name == "Win Room")
       {
         System.Console.WriteLine(_gameService._game.CurrentRoom.Description);
       }
-      if (_gameService._game.CurrentRoom.Name == "Manager's Office")
+      if (_gameService._game.CurrentRoom.Name == "Manager's Office" && !_gameService._game.CurrentPlayer.Inventory.Exists(i => i.Name == "Shovel") && _gameService._game.CurrentPlayer.Inventory.Exists(i => i.Name == "Flashlight"))
       {
-        System.Console.WriteLine();
+        System.Console.WriteLine(_gameService.NoShovelFlashlight);
+      }
+      if (_gameService._game.CurrentRoom.Name == "Manager's Office" && !_gameService._game.CurrentPlayer.Inventory.Exists(i => i.Name == "Shovel") && !_gameService._game.CurrentPlayer.Inventory.Exists(i => i.Name == "Flashlight"))
+      {
+        System.Console.WriteLine(_gameService.NoShovelNoFlashlight);
       }
       System.Console.WriteLine("Thanks for playing");
 
