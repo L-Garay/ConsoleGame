@@ -55,34 +55,42 @@ namespace ConsoleAdventure.Project.Controllers
       switch (command)
       {
         case "go":
+          Console.Clear();
           _gameService.Go(option);
           Print();
           break;
         case "look":
+          Console.Clear();
           _gameService.Look();
           Print();
           break;
         case "search":
+          Console.Clear();
           _gameService.Search();
           Print();
           break;
         case "help":
+          Console.Clear();
           _gameService.Help();
           Print();
           break;
         case "inventory":
+          Console.Clear();
           _gameService.Inventory();
           Print();
           break;
         case "take":
+          Console.Clear();
           _gameService.TakeItem(option);
           Print();
           break;
         case "use":
+          Console.Clear();
           _gameService.UseItem(option);
           Print();
           break;
         case "quit":
+          Console.Clear();
           System.Console.WriteLine("Are you sure you want to do this?  There is no going back.");
           System.Console.WriteLine("");
           System.Console.WriteLine("(Please type out 'yes' or 'no'...");

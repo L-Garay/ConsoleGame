@@ -164,6 +164,8 @@ namespace ConsoleAdventure.Project
 
     public void Look()
     {
+      Messages.Add("You take another look around the room...");
+      Messages.Add("");
       Messages.Add(_game.CurrentRoom.Description);
       return;
     }
